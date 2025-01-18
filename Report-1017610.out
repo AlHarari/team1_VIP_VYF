@@ -1,0 +1,21 @@
+---------------------------------------
+Begin Slurm Prolog: Dec-05-2024 16:31:24
+Job ID:    1017610
+User ID:   dharden7
+Account:   coc
+Job name:  fasttext
+Partition: ice-cpu
+---------------------------------------
+slurmstepd: error: *** JOB 1017610 ON atl1-1-01-005-3-2 CANCELLED AT 2024-12-05T16:31:27 ***
+---------------------------------------
+Begin Slurm Epilog: Dec-05-2024 16:31:29
+Job ID:        1017610
+Array Job ID:  _4294967294
+User ID:       dharden7
+Account:       coc
+Job name:      fasttext
+Resources:     cpu=6,mem=48G,node=1
+Rsrc Used:     cput=00:00:24,vmem=0,walltime=00:00:04,mem=19756K,energy_used=0
+Partition:     ice-cpu
+Nodes:         atl1-1-01-005-3-2
+---------------------------------------
