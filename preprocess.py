@@ -1,6 +1,6 @@
 import os
 import re
-# hi
+
 def concatenate_greek_text(directory, output_text_file, output_utf8_file):
     with open(output_text_file, 'w', encoding='utf-8') as text_outfile, open(output_utf8_file, 'wb') as utf8_outfile:
         for root, dirs, files in os.walk(directory):
