@@ -4,8 +4,8 @@ from contextlib import redirect_stdout, redirect_stderr
 from fasttext import train_unsupervised
 
 current_directory = os.getcwd()
-model_path = os.path.join(current_directory, "models")
-log_path = '/home/hice1/dharden7/scratch/canonical_greeklit/training_log.txt'
+model_path = "/home/hice1/amohammed87/vipteam-folder/models"
+log_path = '/home/hice1/amohammed87/vipteam-folder/team1_VIP_VYF/training_log.txt'
 
 def train_model(model_path, log_path):
     if not os.path.exists(model_path):
@@ -15,20 +15,20 @@ def train_model(model_path, log_path):
         with redirect_stdout(f), redirect_stderr(f):
             print("TRY SUCCESS")
             model = train_unsupervised(
-                input='/home/hice1/dharden7/scratch/canonical_greeklit/post_process/corpus_utf8.bin',
+                input='/storage/ice-shared/vip-vyf/team1/canonical_greeklit/post_process/corpus_utf8.bin',
                 model='skipgram',
                 lr=0.05,
                 dim=200,
                 ws=10,
-                epoch=40,
+                epoch=350,
                 minCount=5,
                 minn=3,
                 maxn=10,
                 neg=8,
-                wordNgrams=2,
+                wordNgrams=5,
                 loss='ns',
                 bucket=2000000,
-                thread=6,
+                thread=8,
                 lrUpdateRate=100,
                 t=0.0001,
                 verbose=2
