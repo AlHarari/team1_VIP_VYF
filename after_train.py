@@ -14,7 +14,7 @@ args_list = get_arguments(sys.argv)
 job_id = sys.argv[1]
 
 # Collect all loss files. Hopefully, we'll be able to properly name our loss files so as to preserve order.
-loss_files = list(filter(lambda file_name: "slurm" in file_name, os.listdir("../training_logs/")))
+loss_files = sorted(list(filter(lambda file_name: "slurm" in file_name, os.listdir("../training_logs/")))) # sorted() to keep track of order. Won't have affected visualizations, but would've probably affected pickled file.
 losses = [parse_losses("../training_logs/" + file_name) for file_name in loss_files]
 
 if len(losses) != len(args_list):
