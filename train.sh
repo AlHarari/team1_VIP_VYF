@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #SBATCH -JTestingArrayJobs
-#SBATCH --ntasks 1 --cpus-per-task 24 ## Each job is made of one task, which exists on 1 node and uses 24 cpus. Even though each task lives on one node, it doesn't mean that one node only works on 1 task. I sort of want it to be that way, however
+#SBATCH --ntasks 1 --cpus-per-task 32 ## Each job is made of one task, which exists on 1 node and uses 32 cpus. Even though each task lives on one node, it doesn't mean that one node only works on 1 task. I sort of want it to be that way, however
 #SBATCH --mem-per-cpu=4G
-#SBATCH -t600 ## Format has to be D-HH:MM:SS, or just how many minutes. For now, make it take 210 minutes (3.5 hours).
+#SBATCH -t720 ## Format has to be D-HH:MM:SS, or just how many minutes. I know, 12 hours is too much.
 #SBATCH -o ../Reports/Report-%A_%a.out # Let's test this out
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=amohammed87@gatech.edu

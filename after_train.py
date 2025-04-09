@@ -53,7 +53,7 @@ plt.legend(prop={'size': 10})
 plt.savefig(f"../visualizations/compare_plots_slurm_{job_id}.png")
 
 # Delete all loss files after we've saved them to the from_args_to_loss_curve dict
-#for file_name in loss_files:
+# for file_name in loss_files:
 #    os.remove("../training_logs/" + file_name)
 
 # Delete files in Report folder as well
