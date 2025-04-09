@@ -7,7 +7,8 @@ import pickle
 # TODO: Make it so we can see what set of parameters lead to the smallest final loss value.
 
 if len(sys.argv) != 2:
-    raise Exception("Must pass in job_id only.")
+    print("Usage: python after_train.py <JOB_ID>.")
+    sys.exit(1)
 
 # Collect different arguments used by reading the input_arguments.txt file.
 args_list = get_arguments(sys.argv)
@@ -26,6 +27,7 @@ if not os.path.exists("pickled_inputs.pkl"):
     from_args_to_loss_curve = {tuple(args): loss for args, loss in zip(args_list, losses)}
     with open("pickled_inputs.pkl", "wb") as f:
         pickle.dump(from_args_to_loss_curve, f)
+    print("CREATED NEW PICKLE FILE")
     # print("SMALLEST LOSS VALUE SO FAR: ", )
 else:
     # Load up dict to update it then dump it back.
@@ -36,6 +38,7 @@ else:
         from_args_to_loss_curve[tuple(args)] = losses[i]
     with open("pickled_inputs.pkl", "wb") as f:
         pickle.dump(from_args_to_loss_curve, f)
+    print("UPDATED PICKLE FILE")
 
 # Plot
 plt.figure(figsize=(20, 12))
