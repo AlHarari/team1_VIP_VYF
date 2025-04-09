@@ -1,0 +1,26 @@
+---------------------------------------
+Begin Slurm Prolog: Apr-08-2025 01:33:54
+Job ID:    2426758
+User ID:   amohammed87
+Account:   coc
+Job name:  wrap
+Partition: pace-cpu
+QOS:       coe-ice
+---------------------------------------
+Traceback (most recent call last):
+  File "/home/hice1/amohammed87/vipteam-folder/team1_VIP_VYF/after_train.py", line 24, in <module>
+    from_args_to_loss_curve = {args: loss for args, loss in zip(args_list, losses)}
+                               ^^^^^^^^^^
+TypeError: unhashable type: 'list'
+---------------------------------------
+Begin Slurm Epilog: Apr-08-2025 01:34:10
+Job ID:        2426758
+User ID:       amohammed87
+Account:       coc
+Job name:      wrap
+Resources:     cpu=1,mem=4G,node=1
+Rsrc Used:     cput=00:00:16,vmem=0,walltime=00:00:16,mem=121556K,energy_used=0
+Partition:     pace-cpu
+QOS:           coe-ice
+Nodes:         atl1-1-01-005-1-1
+---------------------------------------

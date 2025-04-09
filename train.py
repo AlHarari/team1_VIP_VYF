@@ -1,21 +1,7 @@
 import sys
 import os
 from fasttext import train_unsupervised
-
-# Don't forget to remove the carriage return element using :s%/\r/\r/g (See https://stackoverflow.com/questions/5843495/what-does-the-m-character-mean-in-vim)
-def get_arguments(system_arguments):
-    if len(system_arguments) != 3: # 3 for the python script name, the input file name, and the task id.
-        return None
-    file_name, task_id = system_arguments[1], int(system_arguments[2]) # I'm pretty sure you could theoretically get the task id using sys.env, but I digress.
-    if ".txt" not in file_name:
-        raise Exception("Enter a text file") # God knows what I actually passed in.
-    with open(file_name, "r") as arguments_file:
-        line = arguments_file.readlines()[task_id].split(" ") # Use task id as into arguments.
-        lr = float(line[0])
-        args = [lr] + list(map(int, line[1:]))
-    print(f"ARGS for task {task_id}: {args}")  
-    return args
-    
+from helper_file import get_arguments 
 
 current_directory = os.getcwd()
 model_path = "/storage/ice1/0/7/amohammed87/"
@@ -94,6 +80,7 @@ model = train_unsupervised(
     verbose=2
 )
 
+# Fine if model is overriden during job array execution.
 v_num = 9
 if model is not None:
     model.save_model(f"{model_path}/model_{v_num}")
