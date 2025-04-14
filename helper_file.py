@@ -1,4 +1,7 @@
 import re
+import pickle
+import sys
+
 # import matplotlib.pyplot as plt
 
 def get_arguments(system_arguments):
@@ -56,13 +59,20 @@ def parse_losses(log_file_path):
 #    plt.savefig(output_image)
 #    plt.show()
 
-#if __name__ == "__main__":
-#    log_file = "training_log.txt"
-#    losses = parse_losses(log_file)
+if __name__ == "__main__":
+    print("GETTING minimum loss point and corresponding args.")
+    try: 
+        with open("pickled_inputs.pkl", "rb") as inputs_file:
+            k = 5 if len(sys.argv) == 1 else int(sys.argv[1])
+            if len(sys.argv) > 2:
+                print("Usage: python helper_file.py <OPTIONAL_NUMBER_OF_PAIRS>.")
+                sys.exit(1)
+            print(f"k={k}")
 
-#    if not losses:
-#        print("No losses found in the log file.")
-#    else:
-#        plot_losses(losses)
-#        print("Loss plot saved as loss_plot.png")
-
+            args_to_loss_map = pickle.load(inputs_file)
+            print(f"Number of unique args: {len(args_to_loss_map)}")
+            sorted_args_to_loss = sorted(args_to_loss_map.items(), key=lambda entry: sum(entry[1][-20:])/20)[:k]
+            for pair in sorted_args_to_loss:
+                print(f"{pair[0]}: {sum(pair[1][-20:])/20}")
+    except FileNotFoundError:
+        print("There isn't a 'pickled_inputs.pkl' file.") 
