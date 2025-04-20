@@ -42,7 +42,7 @@ else:
 
 # Plot
 plt.figure(figsize=(20, 12))
-plt.title("(Average) Loss Values From Parameters")
+plt.title(f"(Average) Loss Values From Parameters of Job_{job_id}")
 plt.xlabel("Iteration (Proprtional To Epoch #)")
 plt.ylabel("(Average) Loss Value")
 

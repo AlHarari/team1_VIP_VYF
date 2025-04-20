@@ -6,7 +6,7 @@ import seaborn as sns
 
 current_directory = os.getcwd()
 
-model = fasttext.load_model(f"/home/hice1/amohammed87/vipteam-folder/models/model_3")
+model = fasttext.load_model(f"/storage/ice1/0/7/amohammed87/model_9")
 
 sample = {'run': 'τρέξιμο', 'think': 'νομίζω', 'hold': 'αμπάρι'}
 
@@ -41,7 +41,7 @@ plt.xlabel("Words")
 plt.ylabel("Words")
 plt.xticks(rotation=45, ha='right')
 
-plt.savefig("/home/hice1/amohammed87/vipteam-folder/models/similarity_matrix_heatmap(4).png")
+plt.savefig("/home/hice1/amohammed87/vipteam-folder/visualizations/similarity_matrix_heatmap_slurm.png")
 
 plt.close()
 

@@ -6,16 +6,16 @@ import seaborn as sns
 
 current_directory = os.getcwd()
 
-model_path = os.path.join(current_directory, "models")
+model_path = "/storage/ice1/0/7/amohammed87/" # os.path.join(current_directory, "models")
 
-model = fasttext.load_model(f"{model_path}/model_1")
+model = fasttext.load_model(f"{model_path}/model_9")
 
 num_threads = 4
 
-os.environ['OPENBLAS_NUM_THREADS'] = 'num_threads'  # Replace '8' with the number of your CPU cores
-os.environ['MKL_NUM_THREADS'] = 'num_threads'
-os.environ['NUMEXPR_NUM_THREADS'] = 'num_threads'
-os.environ['OMP_NUM_THREADS'] = 'num_threads'
+# os.environ['OPENBLAS_NUM_THREADS'] = 'num_threads'  # Replace '8' with the number of your CPU cores
+# os.environ['MKL_NUM_THREADS'] = 'num_threads'
+# os.environ['NUMEXPR_NUM_THREADS'] = 'num_threads'
+# os.environ['OMP_NUM_THREADS'] = 'num_threads'
 
 all_words = model.get_words()
 
