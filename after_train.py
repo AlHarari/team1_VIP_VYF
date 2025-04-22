@@ -4,8 +4,6 @@ import os
 import sys # This is so we could get the job_id to not have to worry about naming the plot.
 import pickle
 
-# TODO: Make it so we can see what set of parameters lead to the smallest final loss value.
-
 if len(sys.argv) != 2:
     print("Usage: python after_train.py <JOB_ID>.")
     sys.exit(1)
