@@ -4,6 +4,8 @@ import os
 import sys # This is so we could get the job_id to not have to worry about naming the plot.
 import pickle
 
+PICKLE_FILE_PATH = "~/scratch/pickled_inputs.pkl"
+
 if len(sys.argv) != 2:
     print("Usage: python after_train.py <JOB_ID>.")
     sys.exit(1)
@@ -20,21 +22,20 @@ if len(losses) != len(args_list):
     raise Exception("Number of argument tuples != loss files generated. Can't create correspondence.")
 
 # Now, we assume that the first filename in loss_files corresponds to the model trained on the first tuple of arguments in input_arguments, and so on.
-if not os.path.exists("pickled_inputs.pkl"):
+if not os.path.exists(PICKLE_FILE_DIR):
     # Create dict and dump.
     from_args_to_loss_curve = {tuple(args): loss for args, loss in zip(args_list, losses)}
-    with open("pickled_inputs.pkl", "wb") as f:
+    with open(PICKLE_FILE_PATH, "wb") as f:
         pickle.dump(from_args_to_loss_curve, f)
     print("CREATED NEW PICKLE FILE")
-    # print("SMALLEST LOSS VALUE SO FAR: ", )
 else:
     # Load up dict to update it then dump it back.
-    with open("pickled_inputs.pkl", "rb") as f:
+    with open(PICKLE_FILE_PATH, "rb") as f:
         from_args_to_loss_curve = pickle.load(f)
     # Assuming new argument tuples were used.
     for i, args in enumerate(args_list):
         from_args_to_loss_curve[tuple(args)] = losses[i]
-    with open("pickled_inputs.pkl", "wb") as f:
+    with open(PICKLE_FILE_PATH, "wb") as f:
         pickle.dump(from_args_to_loss_curve, f)
     print("UPDATED PICKLE FILE")
 

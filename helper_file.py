@@ -60,9 +60,10 @@ def parse_losses(log_file_path):
 #    plt.show()
 
 if __name__ == "__main__":
+    PICKLED_FILE_PATH = "~/scratch/pickled_inputs.pkl"
     print("GETTING minimum loss point and corresponding args.")
     try: 
-        with open("pickled_inputs.pkl", "rb") as inputs_file:
+        with open(PICKLED_FILE_PATH, "rb") as inputs_file:
             k = 5 if len(sys.argv) == 1 else int(sys.argv[1])
             if len(sys.argv) > 2:
                 print("Usage: python helper_file.py <OPTIONAL_NUMBER_OF_PAIRS>.")

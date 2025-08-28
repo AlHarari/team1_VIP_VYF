@@ -4,11 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-current_directory = os.getcwd()
-
-model = fasttext.load_model(f"/storage/ice1/0/7/amohammed87/model_9")
-
-sample = {'run': 'τρέξιμο', 'think': 'νομίζω', 'hold': 'αμπάρι'}
+model = fasttext.load_model(f"~/scratch/model_9")
 
 # Compare similarity w dot product
 # We will use 10 similar words to run
@@ -22,7 +18,7 @@ sim_dict = {'run':'τρέξιμο', 'jog':'σκούντημα', 'sprint':'τρέ
 matrix = []
 
 for w in sim_dict.keys():
-    word = sim_dict[w] # erronous code had it so that word = sim_dict[w][0]
+    word = sim_dict[w] 
     vec = model.get_word_vector(word)
     vec = vec / np.linalg.norm(vec) # normalize
     matrix.append(vec)
@@ -30,7 +26,6 @@ for w in sim_dict.keys():
 words = list(sim_dict.keys())
 
 matrix = np.array(matrix)
-#print("DOT PRODUCT\n\n", np.dot(matrix, matrix.T))
 matrix = np.dot(matrix, matrix.T)
 
 plt.figure(figsize=(10,8))
@@ -41,7 +36,7 @@ plt.xlabel("Words")
 plt.ylabel("Words")
 plt.xticks(rotation=45, ha='right')
 
-plt.savefig("/home/hice1/amohammed87/vipteam-folder/visualizations/similarity_matrix_heatmap_slurm.png")
+plt.savefig("../visualizations/similarity_matrix_heatmap_slurm.png")
 
 plt.close()
 
