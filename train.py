@@ -31,36 +31,11 @@ model_path = f"/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_{
     Reference: https://github.com/facebookresearch/fastText/issues/418#issuecomment-366302469.
 """
 
-
 # Ok, now start training.
 if not os.path.exists(model_path):
     os.makedirs(model_path)
 
 LR, DIM, WS, EPOCH, MINC, MINN, MAXN, NEG, WORDN = get_arguments(sys.argv[:2])
-
-"""
-This is the order of the arguments, by the way.
-model = train_unsupervised(
-    input='/storage/ice-shared/vip-vyf/team1/canonical_greeklit/post_process/corpora.bin',
-    model='skipgram',
-    lr=0.05,
-    dim=200,
-    ws=8,
-    epoch=1,
-    minCount=5,
-    minn=3,
-    maxn=10,
-    neg=8,
-    wordNgrams=2,
-    loss='ns',
-    bucket=2000000,
-    thread=64,
-    lrUpdateRate=100,
-    t=0.0001,
-    verbose=2
-)
-"""
-
 model = train_unsupervised(
     input='/storage/ice-shared/vip-vyf/team1/canonical_greeklit/post_process/corpora.bin',
     model='skipgram',
