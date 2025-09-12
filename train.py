@@ -3,8 +3,9 @@ import os
 from fasttext import train_unsupervised
 from helper_file import get_arguments 
 
-current_directory = os.getcwd()
-model_path = "/storage/ice1/0/7/amohammed87/"
+# sys.argv = ["train.py", "task id", "array job id"]
+TASK_ID, JOB_ID = sys.argv[1], sys.argv[2]
+model_path = f"/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_{JOB_ID}/model_{TASK_ID}"
 
 """
     These are the parameters that were used that lead to the most optimal loss 
@@ -35,7 +36,7 @@ model_path = "/storage/ice1/0/7/amohammed87/"
 if not os.path.exists(model_path):
     os.makedirs(model_path)
 
-LR, DIM, WS, EPOCH, MINC, MINN, MAXN, NEG, WORDN = get_arguments(sys.argv)
+LR, DIM, WS, EPOCH, MINC, MINN, MAXN, NEG, WORDN = get_arguments(sys.argv[:2])
 
 """
 This is the order of the arguments, by the way.
@@ -80,10 +81,8 @@ model = train_unsupervised(
     verbose=2
 )
 
-# Fine if model is overriden during job array execution.
-v_num = 9
 if model is not None:
-    model.save_model(f"{model_path}/model_{v_num}")
+    model.save_model(f"{model_path}/model")
 else:
     print("\nMODEL TRAINING FAILED.")
 

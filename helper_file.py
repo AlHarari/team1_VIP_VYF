@@ -60,7 +60,7 @@ def parse_losses(log_file_path):
 #    plt.show()
 
 if __name__ == "__main__":
-    PICKLED_FILE_PATH = "~/scratch/pickled_inputs.pkl"
+    PICKLED_FILE_PATH = "/storage/ice-shared/vip-vyf/embeddings_team/pickled_inputs.pkl"
     print("GETTING minimum loss point and corresponding args.")
     try: 
         with open(PICKLED_FILE_PATH, "rb") as inputs_file:

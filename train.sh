@@ -17,5 +17,4 @@ conda init
 source ~/.bashrc         ## Don't know if I need to include this anymore.
 conda activate team1-vip
 
-srun python train.py $SLURM_ARRAY_TASK_ID > ../training_logs/slurm${SLURM_ARRAY_TASK_ID}.txt 2>&1
-# python after_train.py $SLURM_JOB_ID
+srun python train.py $SLURM_ARRAY_TASK_ID $SLURM_ARRAY_JOB_ID > ../training_logs/slurm${SLURM_ARRAY_TASK_ID}.txt 2>&1 && python make_similarity_matrix.py $SLURM_ARRAY_TASK_ID $SLURM_ARRAY_JOB_ID && cp ./input_arguments.txt /storage/ice-shared/vip-vyf/embeddings_team/models/array_models_${SLURM_ARRAY_JOB_ID}/ 
