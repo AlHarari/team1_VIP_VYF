@@ -1,12 +1,27 @@
+import re
 
-with open("/storage/ice-shared/vip-vyf/embeddings_team/corpora/clean_corpora.txt", "r", encoding="utf-8") as corpus:
-    lines = corpus.readlines()
+dirty_corpus_file = "/storage/ice-shared/vip-vyf/embeddings_team/corpora/corpora.bin"
+clean_corpus_file = "/storage/ice-shared/vip-vyf/embeddings_team/corpora/clean_corpora.bin" 
 
-    total_words = [word for line in lines for word in line.split(" ")]
-    unique_words = set(total_words)
-    print(f"total words: {len(total_words)}\tunique words: {len(unique_words)}\n{len(unique_words)/len(total_words) * 100}% of the corpus is unique.")
-    print(f"Lines: {len(lines)} \t\t Unique lines: {len(set(lines))}")
+with open(clean_corpus_file, "wb") as output_file_bin:
+    with open(dirty_corpus_file, "r", encoding="utf-8") as input_file:
 
-    print("Printing first 10 unique words")
-    for word in list(unique_words)[:10]:
-        print(repr(word))
+        content = input_file.read()
+        print(re.search("[A-Za-z]", content).groups())
+        greek_content = re.sub(r"\W?\W?[A-Za-z]\W?\W?", "", content)
+
+        text_r = re.sub(r"\b[^\w\s]", r" \g<0>", greek_content) # punctuations or signs that occur at the end of a word.
+        final_greek = re.sub(r"[^\w\s]\b", r"\g<0> ", text_r)        # punctuations or signs that occur at the beginning of a word.
+
+        output_file_bin.write(final_greek.encode("utf-8", errors="ignore"))
+
+with open(dirty_corpus_file, "r", encoding="utf-8") as f:
+    content = f.read()
+    match_object = re.findall("[A-Za-z]", content)
+    print("Number of latin characters in original corpus: ", len(match_object))
+
+with open(clean_corpus_file, "r", encoding="utf-8") as f:
+    content = f.read()
+    match_object = re.findall("[A-Za-z]", content)
+    print("Number of latin characters in new corpus: ", len(match_object))
+

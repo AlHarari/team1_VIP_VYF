@@ -37,7 +37,7 @@ if not os.path.exists(model_path):
 
 LR, DIM, WS, EPOCH, MINC, MINN, MAXN, NEG, WORDN = get_arguments(sys.argv[:2])
 model = train_unsupervised(
-    input='/storage/ice-shared/vip-vyf/team1/canonical_greeklit/post_process/corpora.bin',
+    input='/storage/ice-shared/vip-vyf/embeddings_team/corpora/clean_corpora.bin',
     model='skipgram',
     lr=LR,
     dim=DIM,
