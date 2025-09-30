@@ -1,0 +1,36 @@
+# Load MMLU dataset from Huggingface
+mmlu_test_raw = load_dataset("lighteval/mmlu", "high_school_geography", split="test")
+
+LETTERS = ["A", "B", "C", "D"]
+
+# preprocess
+modified_mmlu_test_data = []
+
+
+### YOUR CODE HERE ### 
+
+# See: `prompts/mcq/default.txt` for the prompt template format 
+# for each test case, randomly select one of the four options to replace with "None of the above"
+
+"""
+The template is in the form:
+
+For the following question, select the best answer from the four options provided.
+
+{question}
+
+[A]:  {option_A}
+[B]: {option_B}
+[C]:  {option_C}
+[D]: {option_D}
+
+Answer: 
+"""
+for item in tqdm(mmlu_test_raw, desc="Changing options"): # hehe i'll use tqdm as well why not
+    random_selection = LETTERS[np.random.randint(0, 4)]
+    modified_item = dict(item) # Create deep copy of original item selection. I don't want to modify the original test set. 
+    modified_item[f"option_{random_selection}"] = "None of the above."
+    is_correct_answer_modified = random_selection == modified_item["reference"]
+    modified_mmlu_test_data.append((modified_item, is_correct_answer_modified))
+### END YOUR CODE ### 
+
