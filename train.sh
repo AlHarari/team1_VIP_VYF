@@ -3,7 +3,7 @@
 #SBATCH -JTrainingModels
 #SBATCH --ntasks 1 --cpus-per-task 24 ## Each job is made of one task, which exists on 1 node and uses 24 cpus. Even though each task lives on one node, it doesn't mean that one node only works on 1 task.
 #SBATCH --mem-per-cpu=4G
-#SBATCH -t1020 ## Format has to be D-HH:MM:SS, or just how many minutes.
+#SBATCH -t840 ## Format has to be D-HH:MM:SS, or just how many minutes.
 #SBATCH -o ../Reports/Report-%A_%a.out # Let's test this out
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=amohammed87@gatech.edu

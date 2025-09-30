@@ -13,4 +13,4 @@ with open("words_list.tsv", "w", encoding="utf-8") as text_dump_file, open("vect
     words_list = model.get_words()
     for word in words_list:
         text_dump_file.write(word + "\n")
-        #np.savetxt("vectors_list.tsv", model[word].T, delimiter="\t")
+        np.savetxt("vectors_list.tsv", model[word].T, delimiter="\t")
