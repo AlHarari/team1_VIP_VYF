@@ -4,6 +4,15 @@ import numpy as np
 import csv
 import os
 
+# Create matrix from vectors list file.
+DIM = 300
+input_matrix = np.zeros((1, DIM))
+path_to_vectors = "./corpus_stuff/vectors_list_300.txt"
+with open(path_to_vectors, "r", encoding="utf-8") as vector_file:
+    for str_vector in vector_file.readlines():
+        vector = str_vector
+input_matrix = input_matrix[1:,:]
+
 # This model performed the best so far
 path_to_model = "/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_2947993/model_1/model"
 model = fasttext.load_model(path_to_model)
