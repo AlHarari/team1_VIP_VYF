@@ -1,0 +1,2 @@
+/var/lib/slurm/slurmd/job3211240/slurm_script: line 13: cd: /home/hice1/mwarren64/vipteam-folder/team1_VIP_VYF: No such file or directory
+Warning : `load_model` does not return WordVectorModel or SupervisedModel any more, but a `FastText` object which is very similar.

@@ -18,13 +18,18 @@ idx.add(input_matrix)
 
 # helper function to query nearest neighbors
 def get_neighbors(word, k):
-    #if word not in words:
-     #   print(f"'{word}' not in corpus")
-      #  return []
-    #word_idx = words.index(word)
     query_vec = model[word]
     sims, neighbors_idx = idx.search(query_vec.reshape((1, cols)), k)
-    neighbors = [(words[i], sims[0][j]) for j, i in enumerate(neighbors_idx[0])]
+    
+    neighbors = []
+    for j, i in enumerate(neighbors_idx[0]):
+        if 0 <= i < len(words):
+            neighbors.append((words[i], sims[0][j]))
+        #word = words[i]
+        #similarity = sims[0][j]
+        #neighbors.append((word, similarity))
+
+
     return neighbors
 
 greek_words = [
