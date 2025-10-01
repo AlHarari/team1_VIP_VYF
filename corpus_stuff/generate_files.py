@@ -24,4 +24,4 @@ with open("words_list.txt", "w", encoding="utf-8") as text_dump_file, open(f"vec
         i += 1
         print(f"Generated {i} rows so far.")
 input_matrix = input_matrix[1:,:] # Remove 0 row
-np.save("input_matrix.npy", input_matrix)
+np.save(f"input_matrix_{DIM}.npy", input_matrix)
