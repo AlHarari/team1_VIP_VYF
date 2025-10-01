@@ -1,3 +1,3 @@
-./corpus_stuff/*.tsv
-./corpus_stuff/*.txt
-./corpus_stuff/*.npy
+corpus_stuff/*.tsv
+corpus_stuff/*.txt
+corpus_stuff/*.npy
