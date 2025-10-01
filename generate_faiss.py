@@ -19,7 +19,6 @@ idx.add(input_matrix)
 def get_neighbors(word, k):
     query_vec = model[word].reshape((1, DIM))
     sims, neighbors_idx = idx.search(query_vec, k)
-    print(sims)
     neighbors = [(words[i], sims[0][j]) for j, i in enumerate(neighbors_idx[0])] # In the future, it is possible that we'll query for multiple vectors at a time
     return neighbors
 
@@ -34,9 +33,16 @@ greek_words = [
     "μιλώ",   # speak
 ]
 
-print("Query\tNeighbor\tSimilarity")
+save_dir = "./corpus_stuff"
+os.makedirs(save_dir, exist_ok=True)
 
-for qw in greek_words:
-    results = get_neighbors(qw, k=10)
-    for neighbor, _ in results:
-        print(neighbor)
+csv_path = os.path.join(save_dir, "greek_neighbors_1.csv")
+
+with open(csv_path, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Query", "Neighbor_Native", "Similarity_Native", "Neighbor_Faiss", "Similarity_Faiss", ])
+    for qw in greek_words:
+        results_faiss = get_neighbors(qw, k=10)
+        results_native = model.get_nearest_neighbors(qw, k=10)
+        for (neigh_f, score_f), (score_n, neigh_n) in zip(results_faiss, results_native):
+            writer.writerow([qw, neigh_n, score_n, neigh_f, score_f])
