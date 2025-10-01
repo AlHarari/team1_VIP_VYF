@@ -5,37 +5,24 @@ import csv
 import os
 
 # Create matrix from vectors list file.
-DIM = 300
-input_matrix = np.zeros((1, DIM))
-path_to_vectors = "./corpus_stuff/vectors_list_300.txt"
-with open(path_to_vectors, "r", encoding="utf-8") as vector_file:
-    for str_vector in vector_file.readlines():
-        vector = str_vector
-input_matrix = input_matrix[1:,:]
-
-# This model performed the best so far
-path_to_model = "/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_2947993/model_1/model"
-model = fasttext.load_model(path_to_model)
-input_matrix = model.get_input_matrix()
-words = model.get_words()
-
-rows, cols = input_matrix.shape
+model_path = "/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_3181969/model_9/model"
+model = fasttext.load_model(model_path)
+words = model.get_words() # In the future, we'll probably just read the words_list.tsv file.
+input_matrix = np.load("./corpus_stuff/input_matrix_model9.npy") # Need to find a way to ensure that the model correponds to the input matrix!
+ROW, DIM = input_matrix.shape
 
 # Build the index.
-idx = faiss.IndexFlatIP(cols)
+idx = faiss.IndexFlatIP(DIM)
 idx.add(input_matrix)
 
 # helper function to query nearest neighbors
 def get_neighbors(word, k):
-    if word not in words:
-        print(f"'{word}' not in corpus")
-        return []
-    word_idx = words.index(word)
-    query_vec = input_matrix[word_idx].reshape(1, cols)
+    query_vec = model[word].reshape((1, DIM))
     sims, neighbors_idx = idx.search(query_vec, k)
-    neighbors = [(words[i], sims[0][j]) for j, i in enumerate(neighbors_idx[0])]
+    print(sims)
+    neighbors = [(words[i], sims[0][j]) for j, i in enumerate(neighbors_idx[0])] # In the future, it is possible that we'll query for multiple vectors at a time
     return neighbors
-``
+
 greek_words = [
     "τρέξιμο",      # run
     "σκούντημα",        # jog
@@ -47,17 +34,9 @@ greek_words = [
     "μιλώ",   # speak
 ]
 
-save_dir = "/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_2947993/model_1/"
-os.makedirs(save_dir, exist_ok=True)
+print("Query\tNeighbor\tSimilarity")
 
-csv_path = os.path.join(save_dir, "greek_neighbors_faiss_1.csv")
-
-with open(csv_path, "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
-    writer.writerow(["Query", "Neighbor", "Similarity"])
-    for qw in greek_words:
-        results = get_neighbors(qw, k=10)
-        if not results:
-            print(f"warning '{qw}' not in vocab")
-        for neighbor, score in results:
-            writer.writerow([qw, neighbor, score])
+for qw in greek_words:
+    results = get_neighbors(qw, k=10)
+    for neighbor, _ in results:
+        print(neighbor)
