@@ -10,7 +10,7 @@ model = fasttext.load_model(model_path)
 DIM = model.get_dimension() 
 input_matrix = np.zeros((1, DIM)) 
 i = 0
-with open("words_list_copy.txt", "w", encoding="utf-8") as text_dump_file, open(f"vectors_list_{DIM}.txt", "w", encoding="utf-8") as vectors_dump_file_txt, open(f"vectors_list_{DIM}.tsv", "w", encoding="utf-8") as vectors_dump_file_tsv:
+with open("words_list.txt", "w", encoding="utf-8") as text_dump_file, open(f"vectors_list_{DIM}.txt", "w", encoding="utf-8") as vectors_dump_file_txt, open(f"vectors_list_{DIM}.tsv", "w", encoding="utf-8") as vectors_dump_file_tsv:
     words_list = model.get_words()
     for word in words_list:
         text_dump_file.write(word + "\n")
@@ -22,6 +22,6 @@ with open("words_list_copy.txt", "w", encoding="utf-8") as text_dump_file, open(
         vectors_dump_file_txt.write("\n")
         input_matrix = np.concatenate((input_matrix, vector.reshape((1, DIM))))
         i += 1
-        print(i)
+        print(f"Generated {i} rows so far.")
 input_matrix = input_matrix[1:,:] # Remove 0 row
 np.save("input_matrix.npy", input_matrix)
