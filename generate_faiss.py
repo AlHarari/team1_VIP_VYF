@@ -4,11 +4,15 @@ import numpy as np
 import csv
 import os
 
-# Create matrix from vectors list file.
-model_path = "/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_3181969/model_9/model"
+# Set paths.
+common_path = "/storage/ice-shared/vip-vyf/embeddings_team/models/array_models_3181969/model_9/"
+model_path = common_path + "model"
+matrix_path = common_path + "input_matrix_model9.npy"
+
+# Get models and matrix
 model = fasttext.load_model(model_path)
 words = model.get_words() # In the future, we'll probably just read the words_list.tsv file.
-input_matrix = np.load("./corpus_stuff/input_matrix_model9.npy") # Need to find a way to ensure that the model correponds to the input matrix!
+input_matrix = np.load(matrix_path)
 ROW, DIM = input_matrix.shape
 
 # Build the index.
