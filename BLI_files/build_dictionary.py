@@ -7,7 +7,7 @@ from collections import defaultdict
 import pickle as pkl
 
 dictionary = defaultdict(set)
-with open("IAA-all-TPs.csv", "r") as tps_file:
+with open("BLI_files/IAA-all-TPs.csv", "r") as tps_file:
     non_header_lines = tps_file.readlines()[2:] 
     for line in non_header_lines:
         row = line.split(",")
@@ -17,5 +17,5 @@ with open("IAA-all-TPs.csv", "r") as tps_file:
         if greek_word_farnoosh != "":
             dictionary[greek_word_farnoosh].add(translation_farnoosh)
 
-with open("dictionary.pkl", "wb") as dictionary_file:
+with open("BLI_files/dictionary.pkl", "wb") as dictionary_file:
     pkl.dump(dictionary, dictionary_file)

@@ -1,0 +1,21 @@
+
+λόγος:  Hilbert-style        0.3995
+  logic                0.3987
+  process              0.3932
+  permits              0.3878
+  is                   0.3856
+
+
+θεός:  cowman               0.3673
+  everyone             0.3564
+  manking              0.3564
+  smiter               0.3560
+  man--and             0.3558
+
+
+ἀνήρ:  man                  0.4406
+  buisnessman          0.4194
+  bossman              0.4089
+  gentleman            0.4077
+  revolutionist        0.4011
+

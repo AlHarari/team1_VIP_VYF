@@ -12,7 +12,7 @@ with open("dictionary.pkl", "rb") as pickled_dictionary:
 
 # Translate! I had to clean centroids_neighbors.txt file, but hopefully using a model trained on the
 # new corpus would prevent issues coming up in the first place.
-with open("centroids_neighbors.txt", encoding="utf-8") as centroid_neighbors_file, open("translated_centroids.csv", "w", encoding="utf-8") as translated_centroid_neighbors_file:
+with open("centroids_neighbors.txt", encoding="utf-8") as centroid_neighbors_file, open("translated_centroids_new.csv", "w", encoding="utf-8") as translated_centroid_neighbors_file:
     for line in centroid_neighbors_file.readlines():
         neighbors = line.split(",")
         neighbors_translation = []
