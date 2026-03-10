@@ -2,6 +2,7 @@ import requests, json, sys
 from lxml import etree
 from re import sub
 
+output_path = "/storage/ice-shared/vip-vyf/embeddings_team/corpora/"
 ns = {None: 'http://chs.harvard.edu/xmlns/cts'}
 
 ## Professor Kartik tried this but the /text endpoint doesn't remove notes.
@@ -61,7 +62,7 @@ def append_corpora_text(text_data):
     not overwrite text
     """
     if text_data:
-        with open("extended_corpora_final.txt", "a", encoding="utf-8") as txt_file, open("extended_corpora_final.bin", "ab") as bin_file:
+        with open(output_path + "extended_corpora.txt", "a", encoding="utf-8") as txt_file, open(output_path + "extended_corpora.bin", "ab") as bin_file:
             txt_file.write(text_data + "\n")
             bin_file.write((text_data + "\n").encode("utf-8"))
 
