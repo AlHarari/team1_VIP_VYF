@@ -3,9 +3,9 @@
 import os
 import sys
 import math
+import time
 import argparse
 import subprocess
-from itertools import chain
 
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "true")
 
@@ -33,9 +33,9 @@ def parse_args():
     p = argparse.ArgumentParser()
 
     p.add_argument(
-        "--train_file",
+        "--train_dir",
         type=str,
-        default="/storage/ice-shared/vip-vyf/embeddings_team/corpora/clean_corpora.bin",
+        default="/storage/ice-shared/vip-vyf/embeddings_team/corpora/consolidated_corpus",
     )
     p.add_argument(
         "--tokenizer_dir",
@@ -52,14 +52,14 @@ def parse_args():
     p.add_argument("--max_seq_length", type=int, default=256)
     p.add_argument("--mlm_probability", type=float, default=0.15)
     p.add_argument("--learning_rate", type=float, default=1e-4)
-    p.add_argument("--global_batch_size", type=int, default=256)
+    p.add_argument("--global_batch_size", type=int, default=64)
 
     # practical controls
     p.add_argument("--per_device_train_batch_size", type=int, default=16)
-    p.add_argument("--num_train_epochs", type=float, default=1.0)
-    p.add_argument("--max_steps", type=int, default=-1)
-    p.add_argument("--warmup_ratio", type=float, default=0.01)
-    p.add_argument("--weight_decay", type=float, default=0.01)
+    p.add_argument("--num_train_epochs", type=float, default=40.0)
+    p.add_argument("--max_steps", type=int, default=20000)
+    p.add_argument("--warmup_ratio", type=float, default=0.05)
+    p.add_argument("--weight_decay", type=float, default=0.05)
     p.add_argument("--logging_steps", type=int, default=100)
     p.add_argument("--save_steps", type=int, default=5000)
     p.add_argument("--save_total_limit", type=int, default=2)
@@ -110,6 +110,14 @@ def maybe_launch_distributed(num_gpus):
     sys.exit(0)
 
 
+def format_seconds(seconds):
+    seconds = int(round(seconds))
+    h = seconds // 3600
+    m = (seconds % 3600) // 60
+    s = seconds % 60
+    return f"{h:02d}:{m:02d}:{s:02d}"
+
+
 def main():
     args = parse_args()
     num_gpus = choose_num_gpus()
@@ -119,7 +127,10 @@ def main():
 
     tokenizer = BertTokenizerFast.from_pretrained(args.tokenizer_dir)
 
-    raw = load_dataset("text", data_files={"train": args.train_file})["train"]
+    raw = load_dataset(
+        "text",
+        data_files={"train": os.path.join(args.train_dir, "*.txt")}
+    )["train"]
     raw = raw.filter(lambda ex: ex["text"] is not None and ex["text"].strip() != "")
 
     def tokenize_fn(examples):
@@ -143,18 +154,18 @@ def main():
     sep_id = tokenizer.sep_token_id
 
     def group_texts(examples):
-        all_ids = list(chain.from_iterable(examples["input_ids"]))
-        total_length = (len(all_ids) // chunk_size) * chunk_size
-        all_ids = all_ids[:total_length]
-
         input_ids = []
         special_tokens_mask = []
 
-        for i in range(0, total_length, chunk_size):
-            chunk = all_ids[i : i + chunk_size]
-            ids = [cls_id] + chunk + [sep_id]
-            input_ids.append(ids)
-            special_tokens_mask.append([1] + [0] * len(chunk) + [1])
+        for doc_ids in examples["input_ids"]:
+            total_length = (len(doc_ids) // chunk_size) * chunk_size
+            doc_ids = doc_ids[:total_length]
+
+            for i in range(0, total_length, chunk_size):
+                chunk = doc_ids[i : i + chunk_size]
+                ids = [cls_id] + chunk + [sep_id]
+                input_ids.append(ids)
+                special_tokens_mask.append([1] + [0] * len(chunk) + [1])
 
         return {
             "input_ids": input_ids,
@@ -170,7 +181,7 @@ def main():
     )
 
     if len(lm_dataset) == 0:
-        raise ValueError("No training blocks were created. Check your corpus and max_seq_length.")
+        raise ValueError("No training blocks were created. Check your corpus directory and max_seq_length.")
 
     # From scratch: config -> random initialization
     config = BertConfig(
@@ -232,8 +243,8 @@ def main():
     )
 
     if trainer.is_world_process_zero():
+        print(f"Train dir: {args.train_dir}")
         print(f"Tokenizer dir: {args.tokenizer_dir}")
-        print(f"Train file: {args.train_file}")
         print(f"Output dir: {args.output_dir}")
         print(f"World size: {world_size}")
         print(f"Per-device batch size: {args.per_device_train_batch_size}")
@@ -242,12 +253,23 @@ def main():
         print(f"Training blocks: {len(lm_dataset)}")
         print("Model initialization: from scratch (random weights)")
 
-    trainer.train()
+    train_start = time.time()
+    train_result = trainer.train()
+    train_end = time.time()
+    train_seconds = train_end - train_start
+
     trainer.save_model(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
 
     if trainer.is_world_process_zero():
         print("Saved model and tokenizer to:", args.output_dir)
+        print(f"Training wall-clock time (seconds): {train_seconds:.2f}")
+        print(f"Training wall-clock time (hh:mm:ss): {format_seconds(train_seconds)}")
+
+        if hasattr(train_result, "metrics") and "train_runtime" in train_result.metrics:
+            hf_runtime = train_result.metrics["train_runtime"]
+            print(f"Hugging Face reported train_runtime (seconds): {hf_runtime:.2f}")
+            print(f"Hugging Face reported train_runtime (hh:mm:ss): {format_seconds(hf_runtime)}")
 
 
 if __name__ == "__main__":
